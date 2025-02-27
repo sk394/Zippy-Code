@@ -2,7 +2,6 @@ package com.zippycode.ZippyCode.controller;
 
 import com.zippycode.ZippyCode.model.User;
 import com.zippycode.ZippyCode.service.UserService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api/users")
 public class UserController {
     @Autowired
