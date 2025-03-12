@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin
@@ -19,6 +20,11 @@ public class QuestionController {
     @GetMapping
     public ResponseEntity<List<Question>> getAllQuestions() {
         return ResponseEntity.ok(questionService.getAllQuestions());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Optional<Question>> getQuestionById(@PathVariable String id) {
+        return ResponseEntity.ok(questionService.getQuestionById(id));
     }
 
     @GetMapping("/level/{level}")

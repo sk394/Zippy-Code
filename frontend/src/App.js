@@ -1,45 +1,23 @@
-import logo from './logo.svg';
+import { Link, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import './App.css';
-import { useEffect, useState } from 'react';
-
-const BASE_URL = "http://localhost:8000/api";
+import Questions from './Questions';
+import QuestionDetails from './QuestionDetails';
 
 function App() {
-  const [users, setUsers] = useState([]);
-  const getUsers = async () => {
-    try{
-      const users = await fetch(`${BASE_URL}/users`, {
-        method: 'GET',
-        mode: "cors",
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      });
-      console.log(users);
-      if (!users.ok) {
-        throw new Error('Network response was not ok');
-      }
-      const data = await users.json();
-      setUsers(data);
-    }catch{
-      console.log("Error");
-    }
-  }
-
-  useEffect(() => {
-    getUsers();
-  })
-
   return (
+    <Router>
     <div className="App">
-      <code>
-        <pre>
-          {JSON.stringify(users,null,2)}
-
-        </pre>
-      </code>
-      <p>Data</p>
+      <nav className="space-x-2 mt-2 mb-2">
+        <Link to="/"><button className="btn btn-dash btn-accent">Home</button></Link>
+        <Link to="/questions"><button className="btn btn-dash btn-accent">Questions</button></Link>   
+      </nav>
+      <Routes>
+        <Route path ="/" element={<div className="w-full">Login Page Here</div>} />
+        <Route path = "/questions" element = {<Questions />} />
+        <Route path = "/questions/:id" element = { <QuestionDetails />} />
+      </Routes>
     </div>
+    </Router>
   );
 }
 

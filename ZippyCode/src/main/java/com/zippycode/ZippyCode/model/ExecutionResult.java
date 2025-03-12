@@ -11,9 +11,4 @@ public class ExecutionResult {
     private boolean success;
     private String actualOutput;
     private String errorMessage;
- //   private boolean error;
-//    private String message;
-//    private String outputValue;
-//    private String input;
-//    private String expectedOutput;
 }

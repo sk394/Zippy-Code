@@ -1,7 +1,9 @@
 package com.zippycode.ZippyCode.service;
 
 import com.zippycode.ZippyCode.model.Question;
+import com.zippycode.ZippyCode.model.User;
 import com.zippycode.ZippyCode.repository.QuestionRepository;
+import com.zippycode.ZippyCode.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

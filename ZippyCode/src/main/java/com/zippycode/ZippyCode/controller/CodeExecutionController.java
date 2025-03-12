@@ -22,35 +22,6 @@ public class CodeExecutionController {
     @Autowired
     private QuestionService questionService;
 
-//    @PostMapping("/execute")
-//    public ResponseEntity<?> executeCode(@RequestBody Solution solution) {
-//        //validates
-//        if (solution.getCode() == null || solution.getCode().isEmpty()) {
-//            return ResponseEntity.badRequest().body("Code cannot be empty");
-//        }
-//
-//        if (solution.getLang() == null || solution.getLang().isEmpty()) {
-//            return ResponseEntity.badRequest().body("Language cannot be empty");
-//        }
-//
-//        if (solution.getQuestionId() == null || solution.getQuestionId().isEmpty()) {
-//            return ResponseEntity.badRequest().body("Question Id cannot be empty");
-//        }
-//
-//        // find the question
-//        Optional<Question> question = questionService.getQuestionById(solution.getQuestionId());
-//        if (question.isEmpty()) {
-//            return ResponseEntity.badRequest().body("Question not found");
-//        }
-//
-//        Question questionOpt = question.get();
-//        TestCases testCase = questionOpt.getTestCases();
-//
-//        // execute the code
-//        ExecutionResult result = codeExecutionService.executeCode(solution, testCase);
-//        return ResponseEntity.ok(result);
-//    }
-
     @PostMapping("/submit")
     public ResponseEntity<ExecutionResult> submitSolution(@RequestBody Solution request) {
         // find the question
