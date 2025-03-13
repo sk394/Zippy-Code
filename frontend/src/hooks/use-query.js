@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 const BASE_URL = "http://localhost:8000/api";
 
 export default function useQuery(api){
-    console.log(api);
    const [data, setData] = useState([]);
    const [loading, setLoading] = useState(true);
    const [error, setError] = useState(null);
