@@ -6,6 +6,7 @@ function Questions() {
     const { data, loading, error } = useQuery("questions");
 
     return (
+        <div className="container mx-auto mt-2">
         <div>
             <code>
                 {loading && <div>Loading...</div>}
@@ -36,6 +37,7 @@ function Questions() {
                     );
                 })}
             </code>
+        </div>
         </div>
     );
 }
