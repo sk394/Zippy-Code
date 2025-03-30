@@ -5,12 +5,16 @@ import { useParams } from "react-router-dom";
 import useQuery from "./hooks/use-query";
 import { useEffect, useState } from "react";
 import { useMutation } from "./hooks/use-mutation";
+import useMarkQuestionAsSolved from "./hooks/use-question-mark";
+import { useUser } from "@clerk/clerk-react";
 
 
 const QuestionDetails = () => {
     const { id } = useParams();
+    const { user } = useUser();
     const { data: question, loading, error } = useQuery(`questions/${id}`);
-    const [submitCode, { isLoading, error:postError, data:result }] = useMutation("code/submit");
+    const [submitCode, { isLoading, error: postError, data: result }] = useMutation("code/submit");
+    const { markAsSolved } = useMarkQuestionAsSolved();
 
     const [code, setCode] = useState("");
     const [hasResult, setHasResult] = useState(false);
@@ -40,7 +44,7 @@ const QuestionDetails = () => {
         } catch (error) {
             console.error(error);
         }
-    }
+    };
 
     // Render the result properly
     const renderResult = () => {
@@ -48,20 +52,28 @@ const QuestionDetails = () => {
 
         return (
             <div className="flex flex-col">
-            <div className="flex flex-row gap-2">
-                {result.success  ?
-                    <div className="badge badge-success">Correct</div>
-                :
-                <div className="badge badge-warning w-full">Incorrect!</div>}
-                
-                {result.actualOutput && (
-                    <span>
-                        <pre>Your Output: {result.actualOutput}</pre>
-                    </span>
-                )}
-            </div>
-            <div className="ml-12 pl-6">
-                <pre>Expected Output: {question?.testCases?.expectedOutput}</pre>
+                <div className="flex flex-row gap-2">
+                    {result.success ?
+                        <div className="flex flex-row gap-2">
+                            <div className="badge badge-success">Correct</div>
+                            <button onClick={async () => {
+                                await markAsSolved(id, user.id);
+                                alert("Question marked as solved!");
+                            }}>
+                                Submit
+                            </button>
+                        </div>
+                        :
+                        <div className="badge badge-warning w-full">Incorrect!</div>}
+
+                    {result.actualOutput && (
+                        <span>
+                            <pre>Your Output: {result.actualOutput}</pre>
+                        </span>
+                    )}
+                </div>
+                <div className="ml-12 pl-6">
+                    <pre>Expected Output: {question?.testCases?.expectedOutput}</pre>
                 </div>
             </div>
         );
@@ -76,12 +88,12 @@ const QuestionDetails = () => {
                         <div className="grid place-content-center border-t border-base-300 h-screen">
                             {error && <div>Error: {error}</div>}
                             <div className="flex w-full flex-col">
-                                <div className="card bg-base-300 rounded-box grid h-full py-4 place-items-center space-y-3">
+                                <div className="flex flex-wrap card h-full py-4 justify-start space-y-3">
                                     <code>{question?.topics?.map(topic => (<span className="px-1 font-bold" key={topic}>{topic.toUpperCase()}</span>))}</code>
                                     <code>{question?.content}</code>
                                 </div>
                                 <div className="divider"></div>
-                                <div className="card bg-base-300 rounded-box grid h-full py-2 place-items-center">
+                                <div className="card grid h-full py-2 place-items-center">
                                     <code>{question?.testCases ?
                                         <div>
                                             {question?.testCases?.input} {"=>"} {question?.testCases?.expectedOutput}
@@ -98,13 +110,13 @@ const QuestionDetails = () => {
                 <div className="col-span-3 flex flex-col">
                     <div className="bg-slate-950 p-2 flex flex-row justify-between items-center h-20">
                         <div className="flex flex-wrap w-1/2">
-                           {!hasResult && <pre>{!isLoading ? "Submit your code to check your result!!" : <span>Checking.....</span>}</pre>}
+                            {!hasResult && <pre>{!isLoading ? "Submit your code to check your result!!" : <span>Checking.....</span>}</pre>}
                             {renderResult()}
                             {postError && <pre>{postError}</pre>}
                         </div>
-                        <button className="btn btn-outline btn-success btn-sm" 
-                                 onClick={handleSubmitCode}
-                                 disabled={isLoading}
+                        <button className="btn btn-outline btn-success btn-sm"
+                            onClick={handleSubmitCode}
+                            disabled={isLoading}
                         >
                             Submit
                         </button>

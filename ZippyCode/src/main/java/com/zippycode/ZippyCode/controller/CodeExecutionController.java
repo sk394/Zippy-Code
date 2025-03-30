@@ -25,9 +25,8 @@ public class CodeExecutionController {
     @PostMapping("/submit")
     public ResponseEntity<ExecutionResult> submitSolution(@RequestBody Solution request) {
         // find the question
-        Optional<Question> question = questionService.getQuestionById(request.getQuestionId());
-        Question questionOpt = question.get();
-        TestCases testCase = questionOpt.getTestCases();
+        Question question = questionService.getQuestionById(request.getQuestionId());
+        TestCases testCase = question.getTestCases();
         ExecutionResult result = codeExecutionService.execute(request.getCode(), testCase.getInput(), testCase.getExpectedOutput());
         ExecutionResult submissionResult = new ExecutionResult(
                 result.isSuccess(),

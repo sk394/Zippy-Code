@@ -15,10 +15,12 @@ import java.util.List;
 public class Question {
     @Id
     private String id;
+    private String professorId;
 
     private String level;
     private List<String> topics;
     private String content;
     private List<CodeSnippet> codeSnippets;
     private TestCases testCases;
+    private List<String> solvedByStudents;
 }

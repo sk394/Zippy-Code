@@ -23,7 +23,7 @@ public class QuestionController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Question>> getQuestionById(@PathVariable String id) {
+    public ResponseEntity<Question> getQuestionById(@PathVariable String id) {
         return ResponseEntity.ok(questionService.getQuestionById(id));
     }
 
@@ -55,5 +55,26 @@ public class QuestionController {
     public ResponseEntity<Void> deleteQuestion(@PathVariable String id) {
         return questionService.deleteQuestion(id) ? ResponseEntity.noContent().build()
                 : ResponseEntity.notFound().build();
+    }
+
+    @PatchMapping("/{id}/solve/{studentId}")
+    public ResponseEntity<Question> markQuestionAsSolved(
+            @PathVariable String id,
+            @PathVariable String studentId) {
+            return ResponseEntity.ok(questionService.markQuestionAsSolved(id, studentId));
+    }
+
+    // Get questions solved by a student
+    @GetMapping("/solved/{studentId}")
+    public ResponseEntity<List<Question>> getQuestionsSolvedByStudent(@PathVariable String studentId) {
+        List<Question> solvedQuestions = questionService.getQuestionsSolvedByStudent(studentId);
+        return ResponseEntity.ok(solvedQuestions);
+    }
+
+    // Get questions not solved by a student
+    @GetMapping("/unsolved/{studentId}")
+    public ResponseEntity<List<Question>> getQuestionsNotSolvedByStudent(@PathVariable String studentId) {
+        List<Question> unsolvedQuestions = questionService.getQuestionsNotSolvedByStudent(studentId);
+        return ResponseEntity.ok(unsolvedQuestions);
     }
 }

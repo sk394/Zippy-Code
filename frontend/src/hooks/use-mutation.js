@@ -7,7 +7,7 @@ export const useMutation = (api) => {
         isLoading: false,
         error: null,
         data: null
-      });
+    });
 
     const mutate = async (body) => {
         setState({ isLoading: true, error: null, data: null });
@@ -33,7 +33,7 @@ export const useMutation = (api) => {
             setState({ isLoading: false, error: error.message, data: null });
             throw error;
         }
-    }
+    };
 
     return [mutate, state];
 };

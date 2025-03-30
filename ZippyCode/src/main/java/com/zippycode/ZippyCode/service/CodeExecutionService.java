@@ -30,6 +30,7 @@ import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
 public class CodeExecutionService {
     private DockerClient dockerClient;
 
+    // Initializes the Docker client with default configuration
     public CodeExecutionService() {
         DockerClientConfig config = DefaultDockerClientConfig.createDefaultConfigBuilder().build();
         this.dockerClient = DockerClientImpl.getInstance(config, new ApacheDockerHttpClient.Builder()
@@ -42,7 +43,7 @@ public class CodeExecutionService {
 
     public ExecutionResult execute(String code, String testInput, String expectOutput) {
         Path tempFile = null;
-        Path tarFile = null;
+        Path tarFile = null; // Temporary tar file for Docker copy
         String containerId = null;
 
         try {
@@ -79,12 +80,12 @@ public class CodeExecutionService {
                     .awaitCompletion(5, TimeUnit.SECONDS);
             System.out.println("Created /app directory");
 
-            // Copy using docker CLI
+            // Copy the tar file into the container using the Docker CLI
             Process process = Runtime.getRuntime().exec("docker cp " + tarFile.toAbsolutePath().toString() + " " + containerId + ":/app/");
             process.waitFor(5, TimeUnit.SECONDS);
             System.out.println("Copy command executed via CLI");
 
-            // Extract the tar file in the container with correct filename
+            // Extract the tar file inside the container to get script.py
             String tarFileName = tarFile.getFileName().toString();
             ExecCreateCmdResponse extractCmd = dockerClient.execCreateCmd(containerId)
                     .withCmd("sh", "-c", "tar -xvf /app/" + tarFileName + " -C /app/")
@@ -101,7 +102,7 @@ public class CodeExecutionService {
                     }).awaitCompletion(5, TimeUnit.SECONDS);
             System.out.println("Tar extraction output: " + extractOut.toString(StandardCharsets.UTF_8));
 
-            // Check contents
+            // Verify the contents of /app directory post-copy
             ExecCreateCmdResponse checkCmd = dockerClient.execCreateCmd(containerId)
                     .withCmd("sh", "-c", "ls -l /app/")
                     .exec();

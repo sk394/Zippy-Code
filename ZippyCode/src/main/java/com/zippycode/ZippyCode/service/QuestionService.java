@@ -5,8 +5,10 @@ import com.zippycode.ZippyCode.model.User;
 import com.zippycode.ZippyCode.repository.QuestionRepository;
 import com.zippycode.ZippyCode.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,6 +19,14 @@ public class QuestionService {
 
     // create a question
     public Question createQuestion(Question question) {
+        // If professorId is not set, use default "admin"
+        if (question.getProfessorId() == null || question.getProfessorId().isEmpty()) {
+            question.setProfessorId("admin");
+        }
+        // Initialize solvedByStudents if null
+        if (question.getSolvedByStudents() == null) {
+            question.setSolvedByStudents(new ArrayList<>());
+        }
         return questionRepository.save(question);
     }
 
@@ -63,7 +73,35 @@ public class QuestionService {
         return questionRepository.findByTopicsContaining(topic);
     }
 
-    public Optional<Question> getQuestionById(String questionId) {
-        return questionRepository.findById(questionId);
+    public Question getQuestionById(String questionId) {
+        return questionRepository.findById(questionId).orElseThrow(() -> new RuntimeException("Question not Found"));
+    }
+
+    // Mark a question as solved by a student
+    public Question markQuestionAsSolved(String questionId, String studentId) {
+        Question question = getQuestionById(questionId);
+
+        // Initialize list if null
+        if (question.getSolvedByStudents() == null) {
+            question.setSolvedByStudents(new ArrayList<>());
+        }
+
+        // Add student ID if not already in the list
+        if (!question.getSolvedByStudents().contains(studentId)) {
+            question.getSolvedByStudents().add(studentId);
+            return questionRepository.save(question);
+        }
+
+        return question;
+    }
+
+    // Get questions solved by a student
+    public List<Question> getQuestionsSolvedByStudent(String studentId) {
+        return questionRepository.findBySolvedByStudentsContaining(studentId);
+    }
+
+    // Get questions not solved by a student
+    public List<Question> getQuestionsNotSolvedByStudent(String studentId) {
+        return questionRepository.findQuestionsNotSolvedByStudent(studentId);
     }
 }
