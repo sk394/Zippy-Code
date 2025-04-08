@@ -85,15 +85,15 @@ const QuestionDetails = () => {
                 <div className="col-span-2">
                     {/* Questions and Test cases go over here */}
                     <div className="mockup-window border border-base-300 w-full">
-                        <div className="grid place-content-center border-t border-base-300 h-screen">
+                        <div className="grid justify-items-start border-t border-base-300 h-screen">
                             {error && <div>Error: {error}</div>}
                             <div className="flex w-full flex-col">
-                                <div className="flex flex-wrap card h-full py-4 justify-start space-y-3">
+                                <div className="flex flex-wrap card h-full py-3 justify-start space-y-2">
                                     <code>{question?.topics?.map(topic => (<span className="px-1 font-bold" key={topic}>{topic.toUpperCase()}</span>))}</code>
-                                    <code>{question?.content}</code>
+                                    <code className="inline-flex place-items-start">{question?.content}</code>
                                 </div>
                                 <div className="divider"></div>
-                                <div className="card grid h-full py-2 place-items-center">
+                                <div className="card grid h-full mt-0 place-items-center">
                                     <code>{question?.testCases ?
                                         <div>
                                             {question?.testCases?.input} {"=>"} {question?.testCases?.expectedOutput}

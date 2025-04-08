@@ -1,18 +1,24 @@
 import React from "react";
 import { useUser, RedirectToSignUp } from "@clerk/clerk-react";
+import { useNavigate } from "react-router-dom";
 
 function ProtectedRoute({ children, isProfessor = false }) {
     const { isLoaded, isSignedIn, user } = useUser();
+    const naviagate = useNavigate();
+
+    const redirect = (path) => {
+        naviagate(path, { replace: true });
+    };
 
     if (!isLoaded) {
         return <div>Loading...</div>;
     }
 
     if (!isSignedIn) {
-        return <RedirectToSignUp />;
+        redirect("/login");
     }
 
-    if (!user.primaryEmailAddress.emailAddress.endsWith("@uakron.edu")) {
+    if (!user?.primaryEmailAddress?.emailAddress?.endsWith("@uakron.edu")) {
         return (
             <div className="flex flex-col items-center justify-center mt-4">
                 <h1 className="text-lg text-warning">Access Denied !!</h1>

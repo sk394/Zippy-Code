@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const BASE_URL = "http://localhost:8000/api";
+const BASE_URL = "https://zippycode-tagname.onrender.com/api";
 
 export const useMutation = (api) => {
     const [state, setState] = useState({

@@ -5,12 +5,13 @@ import QuestionDetails from './QuestionDetails';
 import Homepage from './Homepage';  // Homepage imported here
 import LoginForm from './LoginForm';
 import CreateQuestion from './CreateQuestion';
-import { SignedIn, SignedOut, UserButton } from "@clerk/clerk-react";
+import { SignedIn, SignedOut, UserButton, useUser } from "@clerk/clerk-react";
 import ProtectedRoute from './Protected-Route';
 import SelectRolePage from './Select-Role';
 import EditQuestion from './EditQuestion';
 
 function App() {
+  const { user } = useUser();
   return (
     <Router>
       <div className="App">
@@ -20,7 +21,7 @@ function App() {
             <Link to="/">
               <button className="btn btn-dash btn-accent">Home</button>
             </Link>
-            <code className="font-semibold text-accent text-xl">Hello, Suman</code>
+            <code className="font-semibold text-accent text-xl">Hello, {user?.unsafeMetadata?.role || "User"}!</code>
             <div className="flex space-x-4 justify-items-center">
               <Link to="/questions">
                 <button className="btn btn-dash btn-accent">Questions</button>
@@ -65,8 +66,8 @@ function App() {
           <Route path="/login" element={<LoginForm />} />
         </Routes>
 
-      </div>
-    </Router>
+      </div >
+    </Router >
   );
 }
 
