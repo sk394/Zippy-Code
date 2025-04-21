@@ -217,13 +217,13 @@ const Homepage = () => {
       <section style={s.section}>
         <div style={s.container}>
           <div style={{ ...s.center, maxWidth: "800px", margin: "0 auto" }}>
-            <h2 style={{ ...s.subtitle, ...slideInLeft() }}>Ready to start your coding journey?</h2>
+            <h2 style={{ ...s.subtitle, ...slideInLeft() }} className="text-white">Ready to start your coding journey?</h2>
             <p style={{ ...s.text, marginBottom: "30px", ...slideInRight(0.2) }}>
               Join other students who are learning DSA with ZippyCode.
             </p>
 
             {/* Enhanced Creator Section with Attractive Animation */}
-            <div style={s.creatorSection}>
+            <div style={s.creatorSection} className="text-white">
               <p style={{ ...fadeIn(0.6) }}>
                 Created by: <span className="creator-name">Manoj Khatri</span> and{" "}
                 <span className="creator-name">Suman Khadka</span>
