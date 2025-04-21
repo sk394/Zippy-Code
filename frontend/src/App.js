@@ -1,7 +1,6 @@
 import { Link, BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 import Questions from './Questions';
-import QuestionDetails from './QuestionDetails';
 import Homepage from './Homepage';  // Homepage imported here
 import LoginForm from './LoginForm';
 import CreateQuestion from './CreateQuestion';
@@ -9,6 +8,9 @@ import { SignedIn, SignedOut, UserButton, useUser } from "@clerk/clerk-react";
 import ProtectedRoute from './Protected-Route';
 import SelectRolePage from './Select-Role';
 import EditQuestion from './EditQuestion';
+import { Chat } from './Chat';
+import QuestionDetails from './RunCode';
+import WeeklyTopLeaderboard from './LeaderBoard';
 
 function App() {
   const { user } = useUser();
@@ -64,6 +66,13 @@ function App() {
             </ProtectedRoute>}
           />
           <Route path="/login" element={<LoginForm />} />
+          <Route path="/chat" element={<Chat />} />
+          <Route path="*" element={<h1>404 Not Found</h1>} />
+          <Route path="/weekly-top-10" element={
+            <ProtectedRoute>
+              <WeeklyTopLeaderboard />
+            </ProtectedRoute>}
+          />
         </Routes>
 
       </div >

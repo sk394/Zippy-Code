@@ -22,21 +22,24 @@ public class UserController {
         return userService.createUser(user);
     }
 
-    @GetMapping("/{email}")
-    @ResponseStatus(HttpStatus.OK)
-    public User getUserByEmail(@PathVariable String email) {
-        return userService.getUserByEmail(email);
-    }
-
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<User> getAllUsers() {
         return userService.getAllUsers();
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<List<User>> getAllUsersBy() {
-        List<User> users = userService.getAllUsers();
-        return new ResponseEntity<>(users, HttpStatus.OK);
+    @GetMapping("/top-10")
+    public ResponseEntity<List<User>> getWeeklyTop10Users() {
+        return new ResponseEntity<>(userService.getAllUsersByTopScore(), HttpStatus.OK);
+    }
+
+    @PutMapping("/{userId}/score")
+    public ResponseEntity<User> updateUserScore(@PathVariable String userId) {
+        try {
+            User updatedUser = userService.updateScoreForUser(userId);
+            return ResponseEntity.ok(updatedUser);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 }
