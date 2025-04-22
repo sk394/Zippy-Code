@@ -286,7 +286,7 @@ const CreateQuestion = () => {
         </div>
       )}
       {error && <div className="alert alert-error">{error}</div>}
-      <div className="drawer-side">
+      <div className="drawer-side z-20">
         <label
           htmlFor="my-drawer-4"
           aria-label="close sidebar"
