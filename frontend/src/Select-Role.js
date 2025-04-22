@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useUser } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
+import { useMutation } from "./hooks/use-mutation";
 
 export default function SelectRolePage() {
     const { user, isLoaded } = useUser();
     const [role, setRole] = useState("");
     const navigate = useNavigate();
+    const [createUser, { isLoading, error, data: result }] = useMutation("users");
 
     useEffect(() => {
         if (isLoaded && user && user.unsafeMetadata.role) {
@@ -14,8 +16,39 @@ export default function SelectRolePage() {
     }, [isLoaded, user, navigate]);
 
     if (!isLoaded || !user) {
-        return <div>Loading...</div>;
+        return (
+            <div className="flex justify-center items-center h-64">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+            </div>
+        );
     }
+
+    const handleRoleSubmission = async (e) => {
+        e.preventDefault();
+        if (!role) {
+            alert("Please select a role.");
+            return;
+        }
+
+        try {
+            await user?.update({
+                unsafeMetadata: { role },
+            });
+            if (user) {
+                await createUser({
+                    id: user.id,
+                    userName: user.emailAddresses[0].emailAddress.split("@")[0],
+                    score: 0
+                });
+            } else {
+                console.error("Cannot create user: user object is null or undefined");
+            }
+        } catch (error) {
+            console.error("Error creating user:", error);
+        } finally {
+            navigate("/");
+        }
+    };
 
     return (
         <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}
@@ -36,12 +69,7 @@ export default function SelectRolePage() {
                 </select>
             </div>
             <button type="submit" className="btn btn-primary"
-                onClick={() => {
-                    user?.update({
-                        unsafeMetadata: { role },
-                    });
-                    navigate("/");
-                }}
+                onClick={handleRoleSubmission}
             >
                 Submit
             </button>

@@ -70,11 +70,18 @@ function Questions() {
         setContextMenu({ ...contextMenu, visible: false });
     };
 
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center h-64">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+            </div>
+        );
+    }
+
     return (
         <div className="container mx-auto mt-2">
             <div>
                 <code>
-                    {loading && <div>Loading...</div>}
                     {error && <div>Error: {error}</div>}
                     {deleteError && <p className="text-red-500">Delete Error: {deleteError}</p>}
 

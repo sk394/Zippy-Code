@@ -11,8 +11,6 @@ const CreateQuestion = () => {
   const navigate = useNavigate();
 
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [prompt, setPrompt] = useState('');
-  const [lastCursorPosition, setLastCursorPosition] = useState(null);
   const textareaRef = useRef(null);
 
   const { id: userId } = useParams();

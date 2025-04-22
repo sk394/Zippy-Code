@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Play, Save, Clock, AlertTriangle, Check, X } from 'lucide-react';
+import { Play, Save, Check, X } from 'lucide-react';
 import { useJudge0 } from './hooks/use-code';
 import { Editor } from '@monaco-editor/react';
 import { useParams } from 'react-router-dom';
@@ -12,7 +12,7 @@ export default function QuestionDetails() {
     const { id } = useParams();
     const { user } = useUser();
     const { data: question, loading, error } = useQuery(`questions/${id}`);
-    const { solveQuestion, loading: submitLoading } = useMarkQuestionAsSolved();
+    const { solveQuestion } = useMarkQuestionAsSolved();
 
     const [code, setCode] = useState("");
     const [input, setInput] = useState("");
@@ -48,7 +48,11 @@ export default function QuestionDetails() {
     }, [id]);
 
     if (loading) {
-        return <div className="flex items-center justify-center h-screen">Loading...</div>;
+        return (
+            <div className="flex justify-center items-center h-64">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+            </div>
+        );
     }
 
 
@@ -99,7 +103,7 @@ export default function QuestionDetails() {
 
     const handleMarkAsSolved = async () => {
         try {
-            await solveQuestion(id, user.emailAddresses[0].emailAddress.split('@')[0]);
+            await solveQuestion(user.id);
             alert("Question marked as solved!");
         } catch (err) {
             console.log('Failed to mark question as solved');
@@ -123,7 +127,6 @@ export default function QuestionDetails() {
                             <button
                                 className="btn btn-xs btn-outline btn-success ml-2"
                                 onClick={handleMarkAsSolved}
-                                disabled={submitLoading}
                             >
                                 Mark As Solved
                             </button>

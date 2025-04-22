@@ -29,21 +29,21 @@ const OtpInput = (props) => {
 
         //focus the next element if there's a value
         if (val) {
-            const next = elem.nextElementSibling | null;
+            const next = elem.nextElementSibling || null;
             next?.focus();
         }
     };
     const handleKeyUp = (e) => {
         const current = e.currentTarget;
         if (e.key === "ArrowLeft" || e.key === "Backspace") {
-            const prev = current.previousElementSibling | null;
+            const prev = current.previousElementSibling || null;
             prev?.focus();
             prev?.setSelectionRange(0, 1);
             return;
         }
 
         if (e.key === "ArrowRight") {
-            const prev = current.nextSibling | null;
+            const prev = current.nextSibling || null;
             prev?.focus();
             prev?.setSelectionRange(0, 1);
             return;

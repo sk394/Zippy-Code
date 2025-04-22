@@ -1,26 +1,24 @@
 import { useState } from 'react';
 
-const BASE_URL = "https://zippycode-tagname.onrender.com/api";
+const BASE_URL = "https://zippycode-tagname.onrender.com/api/users";
 
 const useMarkQuestionAsSolved = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [response, setResponse] = useState(null);
 
-    const solveQuestion = async (questionId, studentId) => {
+    const solveQuestion = async (userId) => {
         setLoading(true);
         setError(null);
 
         try {
-            const response = await fetch(
-                `${BASE_URL}/questions/${questionId}/solve/${studentId}`,
-                {
-                    method: 'PATCH',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                }
-            );
+            const response = await fetch(`${BASE_URL}/${userId}/score`, {
+                method: 'PUT',
+                mode: "cors",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
 
             if (!response.ok) {
                 const errorData = await response.json().catch(() => null);
