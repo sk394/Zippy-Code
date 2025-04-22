@@ -58,6 +58,7 @@ function Questions() {
                 } catch (err) {
                     console.error('Delete failed:', err);
                 }
+                // eslint-disable-next-line no-restricted-globals
                 location.reload();
                 break;
             case 'share':
